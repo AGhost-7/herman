@@ -1,0 +1,9 @@
+version: '2'
+services:
+  gh:
+    build: packages/herman-github
+  backend:
+    backend: packages/herman-backend
+  rabbitmq:
+    image: rabbitmq
+
