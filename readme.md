@@ -14,5 +14,6 @@ front-bitbucket -> { type: 'git' }       -> backend-git
 front-bitbucket -> { type: 'mercurial' } -> backend-mercurial
 ```
 
-Data is sent into a queue using the amqp protocol (rabbitmq) to allow
-to scale out more build servers.
+Data is sent into a work queue using the amqp protocol (rabbitmq) to allow
+to scale out more build servers. It is also possible to persist the events
+using rabbitmq.

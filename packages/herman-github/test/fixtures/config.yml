@@ -1,12 +1,8 @@
 amqp:
-  host: 'rabbitmq'
+  url: 'amqp://rabbitmq'
 github:
-  authentication:
-    basic:
-      user: AGhost-7
-      password: foobar
-  post: 4567
-  repositories:
-    - repository: AGhost-7/herman
-      event_name:
-
+  port: 4567
+  secret: ${HERMAN_GH_SECRET}
+  images:
+    - url: git@github.com:AGhost-7/test-repo.git
+      name: test-image
