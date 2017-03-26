@@ -26,7 +26,6 @@ const validateRequest = exports.validateRequest = (req, res, next) => {
 
 	next()
 }
-
 const onEvent = exports.onEvent = (req, res, next) => {
 	const channel = req.app.get('channel')
 	const config = req.app.get('config')
@@ -41,26 +40,30 @@ const onEvent = exports.onEvent = (req, res, next) => {
 			console.log('Ignoring release for repository %s', repositoryName)
 			return res.sendStatus(200)
 		}
+		const tag = body.release.tag_name
 
-		const message = {
-			type: 'git',
-			url: url,
-			image: imageMatches[0].name,
-			tag: body.release.tag_name
-		}
+		imageMatches.forEach((image) => {
+			const message = {
+				type: 'git',
+				url: url,
+				image: image.name,
+				tag: body.release.tag_name
+			}
+			if(image.path) message.path = image.path
+			channel.sendToQueue(
+				'herman-git',
+				new Buffer(JSON.stringify(message)),
+				{ presistent: true }
+			)
+		})
 
 		console.log(
 			'Event %s for repository %s with tag %s',
 			event,
 			repositoryName,
-			message.tag
+			tag
 		)
 
-		channel.sendToQueue(
-			'herman-git',
-			new Buffer(JSON.stringify(message)),
-			{ presistent: true }
-		)
 	} else {
 		console.log('Event %s ignored', event)
 	}

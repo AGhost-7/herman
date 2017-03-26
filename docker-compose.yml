@@ -2,7 +2,12 @@ version: '2'
 services:
   gh:
     image: aghost7/herman-github
+    port:
+      - 4567
   backend:
     image: aghost7/herman-git
+    environment:
+      - DOCKER_USERNAME
+      - DOCKER_PASSWORD
   rabbitmq:
     image: rabbitmq

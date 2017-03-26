@@ -64,9 +64,13 @@ const buildImage = (config, message, directory, done) => {
 		? config.docker.registry + '/' + message.image + ':' + message.tag
 		: message.image + ':' + message.tag
 
+	const contextPath = message.path
+		? path.join(directory, message.path)
+		: directory
+
 	spawnProcess(
 		'docker',
-		['build', '--tag', imageName, directory],
+		['build', '--tag', imageName, contextPath],
 		(err) => {
 			if(err) return done(err)
 			done(null, imageName)
@@ -142,7 +146,6 @@ const main = () => {
 	common.createChannel(config, 'herman-git', (channel) => {
 		channel.consume('herman-git', (message) => {
 			const body = JSON.parse(message.content)
-			console.log('body:', body)
 			onEvent(config, channel, message, body)
 		}, { noAck: false })
 	})
