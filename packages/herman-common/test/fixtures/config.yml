@@ -14,5 +14,3 @@ github:
       path: packages/herman-github
 git:
   dir: /var/lib/herman/git
-#docker:
-# registry: localhost:5000

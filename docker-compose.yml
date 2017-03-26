@@ -1,13 +1,19 @@
 version: '2'
 services:
-  gh:
+  frontend:
     image: aghost7/herman-github
-    port:
+    ports:
       - 4567
+    environment:
+      - HERMAN_GH_SECRET
+    volumes:
+      - ./config:/etc/herman
   backend:
     image: aghost7/herman-git
     environment:
       - DOCKER_USERNAME
       - DOCKER_PASSWORD
+    volumes:
+      - ./config:/etc/herman
   rabbitmq:
     image: rabbitmq
