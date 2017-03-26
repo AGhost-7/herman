@@ -2,6 +2,7 @@
 const fs = require('fs')
 const yaml = require('js-yaml')
 const amqplib = require('amqplib/callback_api')
+const chokidar = require('chokidar')
 
 const mergeEnv = (config) => {
 	for(var k in config) {
@@ -21,10 +22,24 @@ const mergeEnv = (config) => {
 	return config
 }
 
-exports.loadConfig = () => {
-	const filePath = process.env.HERMAN_CONFIG || '/etc/herman/config.yml'
-	const config = yaml.safeLoad(fs.readFileSync(filePath, 'utf8'))
+const configPath = exports.configPath = () => {
+	return process.env.HERMAN_CONFIG || '/etc/herman/config.yml'
+}
+
+const loadConfig = exports.loadConfig = () => {
+	const contents = fs.readFileSync(configPath(), 'utf8')
+	const config = yaml.safeLoad(contents)
 	return mergeEnv(config)
+}
+
+exports.watchConfig = (onChanged) => {
+	const watcher = chokidar.watch(configPath(), {
+		persistent: true
+	})
+	watcher.on('change', () => {
+		console.log('Change detected to configuration - reloading')
+		onChanged(loadConfig())
+	})
 }
 
 const panic = exports.panic = (err) => {

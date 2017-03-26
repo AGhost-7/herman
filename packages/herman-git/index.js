@@ -135,7 +135,10 @@ const onEvent = (config, channel, message, body) => {
 }
 
 const main = () => {
-	const config = common.loadConfig()
+	let config = common.loadConfig()
+	common.watchConfig((changed) => {
+		config = changed
+	})
 	common.createChannel(config, 'herman-git', (channel) => {
 		channel.consume('herman-git', (message) => {
 			const body = JSON.parse(message.content)

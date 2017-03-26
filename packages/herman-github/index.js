@@ -6,7 +6,9 @@ const crypto = require('crypto')
 const express = require('express')
 const common = require('herman-common')
 
-const validateRequest = exports.validateRequest = (config) => (req, res, next) => {
+const validateRequest = exports.validateRequest = (req, res, next) => {
+
+	const config = req.app.get('config')
 
 	const signature = req.get('X-Hub-Signature')
 	if(!signature) {
@@ -25,7 +27,9 @@ const validateRequest = exports.validateRequest = (config) => (req, res, next) =
 	next()
 }
 
-const onEvent = exports.onEvent = (config, channel) => (req, res, next) => {
+const onEvent = exports.onEvent = (req, res, next) => {
+	const channel = req.app.get('channel')
+	const config = req.app.get('config')
 	const body = JSON.parse(req.body)
 	const event = req.get('X-Github-Event')
 	if(event === 'release') {
@@ -45,8 +49,18 @@ const onEvent = exports.onEvent = (config, channel) => (req, res, next) => {
 			tag: body.release.tag_name
 		}
 
-		console.log('Event for repository %s with tag %s', repositoryName, message.tag)
-		channel.sendToQueue('herman-git', new Buffer(JSON.stringify(message)), { presistent: true })
+		console.log(
+			'Event %s for repository %s with tag %s',
+			event,
+			repositoryName,
+			message.tag
+		)
+
+		channel.sendToQueue(
+			'herman-git',
+			new Buffer(JSON.stringify(message)),
+			{ presistent: true }
+		)
 	} else {
 		console.log('Event %s ignored', event)
 	}
@@ -57,18 +71,27 @@ const createApp = exports.createApp = (config, channel) => {
 	const app = express()
 	app.use(helmet.hidePoweredBy())
 	app.use(bodyParser.raw({ type: 'application/json' }))
-	app.post('/github-events', validateRequest(config), onEvent(config, channel))
+	app.set('channel', channel)
+	app.set('config', config)
+	app.post('/github-events', validateRequest, onEvent)
 	const port = config.github.port || 4567 
 	app.listen(port)
 	console.log('Listening on port %s', port)
+	return app
+}
+
+const listenConfig = (onChange) => {
 }
 
 // https://bin.equinox.io/c/4VmDzA7iaHb/ngrok-stable-linux-amd64.zip
 
 const main = exports.main = () => {
-	const config = common.loadConfig()
+	let config = common.loadConfig()
 	common.createChannel(config, 'herman-git', (channel) => {
-		createApp(config, channel)
+		const app = createApp(config, channel)
+		common.watchConfig((changed) => {
+			app.set('config', changed)
+		})
 	})
 }
 
