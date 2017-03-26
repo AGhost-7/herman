@@ -1,6 +1,6 @@
 {
   "name": "herman-git",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "A scalable docker build tool",
   "main": "index.js",
   "bin": {
@@ -12,7 +12,7 @@
   "author": "Jonathan Boudreau <jonathan.boudreau.92@gmail.com>",
   "license": "MIT",
   "dependencies": {
-    "herman-common": "^0.1.0",
+    "herman-common": "^0.1.1",
     "rimraf": "2.6.1",
     "uuid": "3.0.1"
   }
