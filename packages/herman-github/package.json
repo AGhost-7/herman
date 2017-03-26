@@ -1,6 +1,6 @@
 {
   "name": "herman-github",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "description": "A scalable docker build tool",
   "main": "index.js",
   "bin": {
@@ -15,6 +15,6 @@
     "body-parser": "1.17.1",
     "express": "4.15.2",
     "helmet": "3.5.0",
-		"herman-common": "0.0.1"
+    "herman-common": "^0.1.0"
   }
 }

@@ -1,6 +1,6 @@
 {
   "name": "herman-common",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "description": "A scalable docker build tool",
   "main": "index.js",
   "scripts": {
