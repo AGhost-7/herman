@@ -6,3 +6,8 @@ github:
   images:
     - url: git@github.com:AGhost-7/test-repo.git
       name: test-image
+git:
+  dir: /var/lib/herman/git
+docker:
+  socketPath: /run/docker.sock
+  registry: localhost:5000

@@ -17,3 +17,11 @@ front-bitbucket -> { type: 'mercurial' } -> backend-mercurial
 Data is sent into a work queue using the amqp protocol (rabbitmq) to allow
 to scale out more build servers. It is also possible to persist the events
 using rabbitmq.
+
+## Installation requirements
+For the herman-git process to install, you will need to install the
+following dependencies on Ubuntu:
+
+```
+apt-get install libcurl3 libssl-dev -y
+```

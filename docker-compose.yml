@@ -6,4 +6,3 @@ services:
     backend: packages/herman-backend
   rabbitmq:
     image: rabbitmq
-
