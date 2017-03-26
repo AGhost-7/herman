@@ -1,5 +1,7 @@
 #!/usr/bin/env node
 
+'use strict'
+
 const helmet = require('helmet')
 const bodyParser = require('body-parser')
 const crypto = require('crypto')

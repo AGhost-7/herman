@@ -3,11 +3,13 @@ services:
   frontend:
     image: aghost7/herman-github
     ports:
-      - 4567
+      - 4567:4567
     environment:
       - HERMAN_GH_SECRET
     volumes:
-      - ./config:/etc/herman
+      - ./config:/etc/herman:ro
+    depends_on:
+      - rabbitmq
   backend:
     image: aghost7/herman-git
     environment:
@@ -15,7 +17,9 @@ services:
       - DOCKER_PASSWORD
     privileged: true
     volumes:
-      - ./config:/etc/herman
-      - /var/run/docker.sock:/var/run/docker.sock
+      - ./config:/etc/herman:ro
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+    depends_on:
+      - rabbitmq
   rabbitmq:
     image: rabbitmq

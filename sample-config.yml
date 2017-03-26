@@ -4,8 +4,6 @@ github:
   port: 4567
   secret: ${HERMAN_GH_SECRET}
   images:
-    - url: git@github.com:AGhost-7/test-repo.git
-      name: aghost7/test-image
     - url: git@github.com:AGhost-7/herman.git
       name: aghost7/herman-git
       path: packages/herman-git

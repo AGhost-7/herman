@@ -1,7 +1,5 @@
-FROM node:argon
+FROM node:boron
 
 RUN npm install -g herman-github
-
-VOLUME "/etc/herman/config.yml"
 
 CMD ["herman-github"]
