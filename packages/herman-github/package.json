@@ -1,7 +1,7 @@
 {
   "name": "herman-github",
   "version": "0.0.1",
-  "description": "",
+  "description": "A scalable docker build tool",
   "main": "index.js",
   "bin": {
     "herman-github": "./index.js"
@@ -9,12 +9,12 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "",
-  "license": "ISC",
+  "author": "Jonathan Boudreau <jonathan.boudreau.92@gmail.com>",
+  "license": "MIT",
   "dependencies": {
-    "body-parser": "^1.17.1",
-    "express": "^4.15.2",
-    "helmet": "^3.5.0",
+    "body-parser": "1.17.1",
+    "express": "4.15.2",
+    "helmet": "3.5.0",
 		"herman-common": "0.0.1"
   }
 }

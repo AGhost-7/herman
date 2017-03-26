@@ -40,9 +40,7 @@ const onEvent = exports.onEvent = (config, channel) => (req, res, next) => {
 
 		const message = {
 			type: 'git',
-			source: 'github',
 			url: url,
-			repositoryName: repositoryName,
 			image: imageMatches[0].name,
 			tag: body.release.tag_name
 		}

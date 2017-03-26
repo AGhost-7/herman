@@ -1,7 +1,7 @@
 {
   "name": "herman-git",
   "version": "0.0.1",
-  "description": "",
+  "description": "A scalable docker build tool",
   "main": "index.js",
   "bin": {
     "herman-git": "./index.js"
@@ -9,11 +9,11 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "",
-  "license": "ISC",
+  "author": "Jonathan Boudreau <jonathan.boudreau.92@gmail.com>",
+  "license": "MIT",
   "dependencies": {
     "herman-common": "0.0.1",
-    "mkdirp": "^0.5.1",
-    "uuid": "^3.0.1"
+    "rimraf": "2.6.1",
+    "uuid": "3.0.1"
   }
 }

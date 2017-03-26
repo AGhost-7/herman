@@ -1,8 +1,8 @@
 version: '2'
 services:
   gh:
-    build: packages/herman-github
+    image: aghost7/herman-github
   backend:
-    backend: packages/herman-backend
+    image: aghost7/herman-git
   rabbitmq:
     image: rabbitmq

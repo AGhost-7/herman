@@ -1,15 +1,15 @@
 {
   "name": "herman-common",
   "version": "0.0.1",
-  "description": "",
+  "description": "A scalable docker build tool",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "",
-  "license": "ISC",
+  "author": "Jonathan Boudreau <jonathan.boudreau.92@gmail.com>",
+  "license": "MIT",
   "dependencies": {
-    "amqplib": "^0.5.1",
-    "js-yaml": "^3.8.2"
+    "amqplib": "0.5.1",
+    "js-yaml": "3.8.2"
   }
 }

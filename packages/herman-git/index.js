@@ -6,6 +6,7 @@ const amqplib = require('amqplib')
 const fs = require('fs')
 const path = require('path')
 const spawn = require('child_process').spawn
+const rmrf = require('rimraf')
 
 const spawnProcess = (command, args, done) => {
 	const proc = spawn(
@@ -14,35 +15,54 @@ const spawnProcess = (command, args, done) => {
 		{ stdio: 'inherit' }
 	)
 
+	let exited = false
+
+	proc.on('exit', (code) => {
+		if(exited) return
+		exited = true
+		if(code !== 0) {
+			done(code)
+		} else {
+			done(null)
+		}
+	})
+
 	proc.on('error', (err) => {
+		if(exited) return
+		exited = true
 		done(err)
 	})
 
-	proc.on('close', () => {
-		done()
-	})
 }
 
 const fetchRepository = (config, message, done) => {
 	const buildId = uuid.v4()
-	const buildPath = path.join(config.git.dir, message.source, buildId)
-
+	const buildPath = path.join(config.git.dir, buildId)
 	// Based on how travis fetches repositories
 	spawnProcess(
 		'git',
 		['clone', '--depth=50', message.url, buildPath],
 		(err) => {
 			if(err) return done(err)
-			done(null, buildPath)
+			spawnProcess(
+				'git',
+				['-C', buildPath, 'fetch', 'origin', 'tags/' + message.tag],
+				(err) => {
+					if(err) return done(err)
+					spawnProcess(
+						'git',
+						['-C', buildPath, 'checkout', '--force', '--quiet', 'FETCH_HEAD'],
+						(err) => {
+							done(err, buildPath)
+						})
+				})
 		})
 }
 
 const buildImage = (config, message, directory, done) => {
-
-	console.log('message:', JSON.stringify(message, null, 2))
-	const imageName = config.docker.registry
+	const imageName = config.docker && config.docker.registry
 		? config.docker.registry + '/' + message.image + ':' + message.tag
-		: message.image + message.tag
+		: message.image + ':' + message.tag
 
 	spawnProcess(
 		'docker',
@@ -61,26 +81,54 @@ const pushImage = (config, message, image, done) => {
 	)
 }
 
+const removeRepository = (directory, done) => {
+	console.log('Removing build directory %s', directory)
+	rmrf(directory, done)
+}
+
+const cleanImage = (image, done) => {
+	console.log('Removing image %s', image)
+	spawnProcess(
+		'docker',
+		['rmi', image],
+		done
+	)
+}
+
+const cleanProject = (directory, image, done) => {
+	removeRepository(directory, (err) => {
+		cleanImage(image, (rmiErr) => {
+			done(err || rmiErr)
+		})
+	})
+}
+
+const nack = (channel, message) => {
+	setTimeout(() => {
+		channel.nack(message)
+	}, 10000)
+}
+
 const onEvent = (config, channel, message, body) => {
 	fetchRepository(config, body, (err, directory) => {
 		if(err) {
-			console.error('Error fetching repository', err)
-			return channel.nack(message)
+			return nack(channel, message)
 		}
 		buildImage(config, body, directory, (err, image) => {
 			if(err) {
+				removeRepository(directory, () => {})
 				// If we fail to build the image then we should
 				// remove it from the queue as it will probably
 				// not work even if we move to another server.
-				console.error('Error building image:', err)
 				return channel.ack(message)
 			}
 			pushImage(config, body, image, (err) => {
-				if(err) {
-					console.error('Error pushing image to repository', err)
-					return channel.nack(message)
-				}
-				channel.ack(message)
+				cleanProject(directory, image, () => {
+					if(err) {
+						return nack(channel, message)
+					}
+					channel.ack(message)
+				})
 			})
 		})
 	})
