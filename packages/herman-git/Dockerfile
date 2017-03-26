@@ -10,4 +10,6 @@ COPY ./entrypoint.sh ./entrypoint.sh
 
 ENTRYPOINT ./entrypoint.sh
 
+RUN curl -sSL https://get.docker.com/ | sh
+
 CMD ["herman-git"]
