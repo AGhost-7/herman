@@ -8,6 +8,21 @@
   },
   "author": "Jonathan Boudreau <jonathan.boudreau.92@gmail.com>",
   "license": "MIT",
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/AGhost-7/herman"
+	},
+	"bugs": {
+		"url": "https://github.com/AGhost-7/herman/issues"
+	},
+	"keywords": [
+		"docker",
+		"build",
+		"tool",
+		"git",
+		"github",
+		"webhooks"
+	],
   "dependencies": {
     "amqplib": "0.5.1",
     "chokidar": "^1.6.1",

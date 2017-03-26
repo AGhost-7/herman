@@ -6,10 +6,26 @@
   "main": "index.js",
   "scripts": {
     "bootstrap": "lerna bootstrap",
+		"publish": "lerna publish --skip-git",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "",
-  "license": "ISC",
+  "author": "Jonathan Boudreau <jonathan.boudreau.92@gmail.com>",
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/AGhost-7/herman"
+	},
+	"bugs": {
+		"url": "https://github.com/AGhost-7/herman/issues"
+	},
+	"keywords": [
+		"docker",
+		"build",
+		"tool",
+		"git",
+		"github",
+		"webhooks"
+	],
+  "license": "MIT",
   "dependencies": {
     "lerna": "2.0.0-beta.38"
   }

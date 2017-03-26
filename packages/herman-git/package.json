@@ -11,6 +11,21 @@
   },
   "author": "Jonathan Boudreau <jonathan.boudreau.92@gmail.com>",
   "license": "MIT",
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/AGhost-7/herman"
+	},
+	"bugs": {
+		"url": "https://github.com/AGhost-7/herman/issues"
+	},
+	"keywords": [
+		"docker",
+		"build",
+		"tool",
+		"git",
+		"github",
+		"webhooks"
+	],
   "dependencies": {
     "herman-common": "^0.1.1",
     "rimraf": "2.6.1",

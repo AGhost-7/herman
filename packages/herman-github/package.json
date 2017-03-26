@@ -11,6 +11,21 @@
   },
   "author": "Jonathan Boudreau <jonathan.boudreau.92@gmail.com>",
   "license": "MIT",
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/AGhost-7/herman"
+	},
+	"bugs": {
+		"url": "https://github.com/AGhost-7/herman/issues"
+	},
+	"keywords": [
+		"docker",
+		"build",
+		"tool",
+		"git",
+		"github",
+		"webhooks"
+	],
   "dependencies": {
     "body-parser": "1.17.1",
     "express": "4.15.2",
