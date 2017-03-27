@@ -68,14 +68,18 @@ const buildImage = (config, message, directory, done) => {
 	const contextPath = message.path
 		? path.join(directory, message.path)
 		: directory
-
-	spawnProcess(
-		'docker',
-		['build', '--tag', imageName, contextPath],
-		(err) => {
-			if(err) return done(err)
-			done(null, imageName)
+	const args = ['build', '--tag', imageName]
+	if(message.args) {
+		Object.keys(message.args).forEach((argKey) => {
+			args.push('--build-arg')
+			args.push(argKey + '=' + message.args[argKey])
 		})
+	}
+	args.push(contextPath)
+	spawnProcess('docker', args, (err) => {
+		if(err) return done(err)
+		done(null, imageName)
+	})
 }
 
 const pushImage = (config, message, image, done) => {

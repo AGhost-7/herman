@@ -19,6 +19,8 @@ services:
     volumes:
       - ./config:/etc/herman:ro
       - /var/run/docker.sock:/var/run/docker.sock:ro
+      # Required for pulling down ssh repositories.
+      - ~/.ssh:/root/.ssh:ro
     depends_on:
       - rabbitmq
   rabbitmq:

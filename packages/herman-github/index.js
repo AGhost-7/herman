@@ -16,7 +16,6 @@ const validateRequest = exports.validateRequest = (req, res, next) => {
 	if(!signature) {
 		return res.sendStatus(401)
 	}
-
 	const hmac = crypto.createHmac('sha1', config.github.secret)
 	hmac.update(req.body)
 	const digest = 'sha1=' + hmac.digest('hex')
@@ -52,6 +51,7 @@ const onEvent = exports.onEvent = (req, res, next) => {
 				tag: body.release.tag_name
 			}
 			if(image.path) message.path = image.path
+			if(image.args) message.args = image.args
 			channel.sendToQueue(
 				'herman-git',
 				new Buffer(JSON.stringify(message)),
@@ -74,8 +74,8 @@ const onEvent = exports.onEvent = (req, res, next) => {
 
 const createApp = exports.createApp = (config, channel) => {
 	const app = express()
-	app.use(helmet.hidePoweredBy())
 	app.use(bodyParser.raw({ type: 'application/json' }))
+	app.use(helmet.hidePoweredBy())
 	app.set('channel', channel)
 	app.set('config', config)
 	app.post('/github-events', validateRequest, onEvent)
